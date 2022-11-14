@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Highload Parser
+			{% endblock %}
+		</title>
+		<link
+		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+	<body>
+
+		{# NAV #}
+		<nav class='bg-[#0F111D] py-1.5 fixed top-0 right-0 left-0'>
+			<div class='max-w-7xl flex mx-auto xl:px-0 px-4'>
+				<div class='flex items-center justify-between w-full'>
+					<img height="28px" width='253px' class='w-[13.75rem]' src="https://highload.today/wp-content/themes/supermc/images/logo/logo.svg" alt="logo">
+					<div class='ml-auto flex items-center space-x-2'>
+						{% if app.user %}
+							<p class='text-white'>Hello,
+								{{ app.user.email }}</p>
+						{% endif %}
+
+						<a href="{{ app.user ? 'logout' :'login'}}" class='ml-auto bg-primary py-2.5 px-5 rounded-md font-bold text-white text-sm'>{{app.user ? "Logout" : "Login"}}</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		{# BODY #}
+		<div class=' min-h-screen bg-[#171926] py-14'>
+			<div class='max-w-7xl mx-auto xl:px-0 px-4 '> {% block body %}{% endblock %}
+				</div>
+			</div>
+		</body>
+	</html>

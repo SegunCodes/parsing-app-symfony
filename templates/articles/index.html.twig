@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	{% if articles | length == 0 %}
+		<div class='text-white text-center'>
+			<h1 class='mb-2 text-6xl mt-44 text-center font-bold'>No articles found!</h1>
+			<span class='text-lg mr-1'>Run</span>
+			<code>php bin/console app:parse-highload.today
+			</code>
+			<span class='ml-1'>to download articles</span>
+		</p>
+	</div>
+
+{% else %}
+	<ul class='space-y-4 mt-10 max-w-[51.875rem] mx-auto'>
+		{% for a in articles %}
+			<li class='bg-white rounded-md'>
+				<div class='flex items-center justify-between p-5'>
+					<h2 class='text-xl text-secondary font-bold '>{{a.title}}</h2>
+
+					{% if is_granted('ROLE_ADMIN') %}
+						<a href="{{path('article_delete', {id: a.id})}}" class="text-red-500 font-bold py-2 px-4 ml-6 rounded transition-all hover:text-red-300">
+							Delete Article
+						</a>
+					{% endif %}
+
+				</div>
+
+				<p class='font-light text-sm pl-5'>{{(a.datePublished ?? a.created) | date("m/d/Y")}}</p>
+
+				{% if a.picture %}
+					<div class='bg-primary bg-contain mt-4'>
+						<img src="{{a.picture}}" alt="article picture" class='w-full border-r-8 border-b-8 border-primary'>
+					</div>
+				{% endif %}
+
+				<p class='text-lg p-5'>{{a.description}}</p>
+
+			</li>
+		{% endfor %}
+	</ul>
+
+
+	{# paginator #}
+	<div class='mx-auto mt-10 w-40 flex items-center text-white'>
+		<a {% if prevPage %} href="{{path('articles', {page: prevPage})}}" {% endif %} class='w-15 flex items-center justify-center p-4 rounded-md {{prevPage ? " bg-primary" : " bg-gray-500 cursor-not-allowed"}}'>
+
+			<svg class="h-3.5 w-3.5" viewbox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M11 6.00073H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+				<path d="M6 1.00073L1 6.00073L6 11.0007" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+		</a>
+
+		<p class='mx-5 font-bold text-lg'>
+			{{ pageNum }}
+		</p>
+
+		<a {% if nextPage %} href="{{path('articles', {page: nextPage})}}" {% endif %} disabled="{{nextPage ? 'false' : 'true' }}" class="w-15 flex items-center justify-center p-4 rounded-md {{nextPage ? " bg-primary" : " bg-gray-500 cursor-not-allowed"}}">
+
+			<svg class="h-3.5 w-3.5 rotate-180" viewbox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M11 6.00073H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+				<path d="M6 1.00073L1 6.00073L6 11.0007" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+		</a>
+
+	</div>
+{% endif %}{% endblock %}
