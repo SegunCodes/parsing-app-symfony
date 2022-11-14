@@ -8,16 +8,14 @@ services:
         ports:
             - 5672:5672
             - 15672:15672
-        environment:
-            - RABBITMQ_DEFAULT_USER=guest
-            - RABBITMQ_DEFAULT_PASS=guest
+        env_file:
+            - variables.env
         volumes:
             - ./docker/rabbitmq:/var/lib/rabbitmq
     database:
         image: 'mysql:latest'
-        environment:
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: main
+        env_file:
+            - var.env
         volumes:
             - ./docker/mysql:/var/lib/mysql
         ports:
